@@ -1,0 +1,34 @@
+services:
+    # image project
+    app:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        restart: unless-stopped
+        command: bash -c "python manage.py migrate --skip-checks && python manage.py runserver 0.0.0.0:80"
+        ports:
+            - "80:80"
+        # working_dir: /var/www/
+        volumes:
+            - ./:/community_guard
+        # depends_on:
+        #     - redis
+        # networks:
+        #     - laravel
+
+    # # db mysql
+    # db:
+    #     image: mysql:8.0
+    #     platform: linux/x86_64
+    #     restart: unless-stopped
+    #     environment:
+    #         MYSQL_DATABASE: ${DB_DATABASE:-laravel}
+    #         MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-root}
+    #         MYSQL_PASSWORD: ${DB_PASSWORD:-userpass}
+    #         MYSQL_USER: ${DB_USERNAME:-username}
+    #     volumes:
+    #         - ./.docker/mysql/dbdata:/var/lib/mysql
+    #     ports:
+    #         - "3300:3306"
+    #     networks:
+    #         - laravel
