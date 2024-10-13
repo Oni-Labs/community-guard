@@ -1,7 +1,10 @@
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.views import APIView
 from rest_framework.status import (
     HTTP_201_CREATED, HTTP_400_BAD_REQUEST, HTTP_200_OK)
+from rest_framework.views import APIView
+from rest_framework_simplejwt.authentication import JWTAuthentication
+
 
 from apps.account.serializers import CreateUserSerializer
 from apps.account.models import User
@@ -20,6 +23,9 @@ class CreateUserAPIView(APIView):
 
 
 class ListUserAPIView(APIView):
+    authentication_classes = (JWTAuthentication,)
+    permission_classes = (IsAuthenticated,)
+
     def get(self, request, *args, **kwargs):
         users = User.objects.values(
             'username', 'email', 'is_active', 'is_superuser'
