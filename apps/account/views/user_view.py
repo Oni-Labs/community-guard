@@ -11,6 +11,9 @@ from apps.account.models import User
 
 
 class CreateUserAPIView(APIView):
+    authentication_classes = ()
+    permission_classes = ()
+
     def post(self, request, *args, **kwargs) -> Response:
         serializer = CreateUserSerializer(data=request.data)
 
