@@ -23,5 +23,6 @@ urlpatterns = [
     path('api/auth/', include('rest_framework.urls')),
 
     # apps
-    path('api/account/', include('apps.account.urls'))
+    path('api/account/', include('apps.account.urls')),
+    path('api/publication/', include('apps.publication.urls')),
 ]
