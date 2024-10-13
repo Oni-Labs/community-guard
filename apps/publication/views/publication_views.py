@@ -5,7 +5,7 @@ from rest_framework.status import (
 from rest_framework.views import APIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
-from apps.publication.serializers import CreatePublicationSerializer
+from apps.publication.serializers import CreatePublicationSerializer, ListPublicationSerializer
 from apps.publication.models import Publication
 
 
@@ -14,7 +14,8 @@ class CreatePublicationAPIView(APIView):
     permission_classes = (IsAuthenticated,)
 
     def post(self, request, *args, **kwargs) -> Response:
-        serializer = CreatePublicationSerializer(data=request.data)
+        serializer = CreatePublicationSerializer(
+            data=request.data, logged_user=request.user)
 
         if serializer.is_valid():
             serializer.save()
@@ -28,11 +29,13 @@ class ListPublicationAPIView(APIView):
     permission_classes = (IsAuthenticated,)
 
     def get(self, request, *args, **kwargs) -> Response:
-        publications = Publication.objects.values(
-            'title', 'description', 'status', 'create_at', 'create_by',
+        publications = Publication.objects.filter(
+            status=True
         )
 
-        return Response(data=publications, status=HTTP_200_OK)
+        serializer = ListPublicationSerializer(instance=publications, many=True)
+
+        return Response(data=serializer.data, status=HTTP_200_OK)
 
 
 

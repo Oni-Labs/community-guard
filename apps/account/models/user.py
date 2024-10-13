@@ -18,3 +18,6 @@ class User(AbstractUser):
         null=True
     )
 
+    def __str__(self) -> str:
+        return f'{self.username}'
+

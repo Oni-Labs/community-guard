@@ -1,1 +1,1 @@
-from .publication_serializer import CreatePublicationSerializer
+from .publication_serializer import CreatePublicationSerializer, ListPublicationSerializer

@@ -6,7 +6,7 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
 
-from apps.account.serializers import CreateUserSerializer
+from apps.account.serializers import CreateUserSerializer, ListUserSerializer
 from apps.account.models import User
 
 
@@ -18,7 +18,6 @@ class CreateUserAPIView(APIView):
             serializer.save()
 
             return Response(data=serializer.data, status=HTTP_201_CREATED)
-
         return Response(data=serializer.errors, status=HTTP_400_BAD_REQUEST)
 
 
@@ -27,11 +26,11 @@ class ListUserAPIView(APIView):
     permission_classes = (IsAuthenticated,)
 
     def get(self, request, *args, **kwargs):
-        users = User.objects.values(
-            'username', 'email', 'is_active', 'is_superuser'
-        )
+        users = User.objects.all()
 
-        return Response(data=users, status=HTTP_200_OK)
+        serializer = ListUserSerializer(instance=users, many=True)
+        return Response(data=serializer.data, status=HTTP_200_OK)
+
 
 
 
